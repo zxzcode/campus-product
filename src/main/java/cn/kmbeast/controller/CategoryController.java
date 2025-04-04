@@ -5,14 +5,13 @@ import cn.kmbeast.pojo.api.Result;
 import cn.kmbeast.pojo.dto.query.extend.CategoryQueryDto;
 import cn.kmbeast.pojo.entity.Category;
 import cn.kmbeast.service.CategoryService;
-import org.apache.ibatis.io.ResolverUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * 商品类别接口
+ * 商品类别接口11111
  */
 @RestController
 @RequestMapping("/category")
