@@ -19,4 +19,5 @@ public interface CategoryMapper {
     void batchDelete(@Param(value="ids")List<Integer> ids);
 
     int queryCount(CategoryQueryDto categoryQueryDto);
+    List<Category> query(CategoryQueryDto categoryQueryDto);
 }

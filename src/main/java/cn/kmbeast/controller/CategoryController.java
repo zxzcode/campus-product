@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 商品类别接口
+ */
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
