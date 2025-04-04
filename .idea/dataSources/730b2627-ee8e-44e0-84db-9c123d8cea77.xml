@@ -979,8 +979,8 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="296" parent="1" name="campus-product">
-      <IntrospectionTimestamp>2025-04-04.06:26:59</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2025-04-03.14:26:59</LocalIntrospectionTimestamp>
+      <IntrospectionTimestamp>2025-04-04.18:13:40</IntrospectionTimestamp>
+      <LocalIntrospectionTimestamp>2025-04-04.02:13:40</LocalIntrospectionTimestamp>
       <CollationName>utf8mb4_bin</CollationName>
     </schema>
     <user id="297" parent="1" name="mysql.infoschema">

@@ -108,7 +108,7 @@
         </where>
         ORDER BY u.create_time DESC
         <if test="current != null and size != null">
-            LIMIT #{current},#{size}
+            Limit#{current},#{size}
         </if>
     </select>
 
