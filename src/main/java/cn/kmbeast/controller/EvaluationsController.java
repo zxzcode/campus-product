@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 评论 Controller 4567
+ * 评论 Controller
  */
 @RestController
 @RequestMapping("/evaluations")
