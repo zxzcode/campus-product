@@ -14,5 +14,5 @@ public class CategoryQueryDto extends QueryDto {
     /**
      * 是否启用
      */
-    private Boolean isUsed;
+    private Boolean isUse;
 }

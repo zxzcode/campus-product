@@ -24,7 +24,7 @@
             #{id}
         </foreach>
     </delete>
-    <select id="queryCount">
+    <select id="queryCount" resultType="int">
         select count(*)
         from category
         <where>
@@ -35,5 +35,20 @@
                 is_use=#{isUse}
             </if>
         </where>
+    </select>
+
+    <select id="query" resultType="cn.kmbeast.pojo.entity.Category">
+        select *
+        from category
+        <where>
+            <if test="name!= null and name != ''">
+               and name = #{name}
+            </if>
+            <if test="isUse != null">
+                and is_use = #{isUse}
+            </if>
+        </where>
+        Oreder by id DESC
+        LIMIT#{current},#{size}
     </select>
 </mapper>

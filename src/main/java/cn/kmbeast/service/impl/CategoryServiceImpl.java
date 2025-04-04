@@ -21,6 +21,7 @@ import cn.kmbeast.utils.JwtUtil;
 import io.jsonwebtoken.lang.Collections;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.poi.poifs.crypt.cryptoapi.CryptoAPIEncryptionHeader;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +77,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Result<List<Category>> query(CategoryQueryDto categoryQueryDto) {
         int totalCount = categoryMapper.queryCount(categoryQueryDto);
-        return null;
+        List<Category> categoryList = categoryMapper.query(categoryQueryDto);
+        return ApiResult.success(categoryList);
     }
 }
