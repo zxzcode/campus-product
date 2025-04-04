@@ -5,7 +5,6 @@
         INSERT INTO category (name,is_use)
         VALUES (#{name},#{isUse})
     </insert>
-
     <update id="update">
         update category
         <set>
@@ -18,7 +17,6 @@
         </set>
         where id = #{id}
     </update>
-
     <delete id="batchDelete">
         DELETE FROM category
         where id IN
@@ -34,25 +32,8 @@
                 and name like concat('%',#{name},'%')
             </if>
             <if test="is_use != null">
-               and is_use=#{isUse}
+                is_use=#{isUse}
             </if>
         </where>
-    </select>
-
-    <select id="query" resultType="cn.kmbeast.pojo.entity.Category">
-        select *
-        from category
-        <where>
-            <if test="name != null and name != ''">
-                name = #{name}
-            </if>
-            <if test="isUse != null">
-                is_use = #{isUse}
-            </if>
-        </where>
-        Order by id Desc
-        <if test="current != null and size != null">
-            limit#{current},#{size}
-        </if>
     </select>
 </mapper>
