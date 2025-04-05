@@ -78,6 +78,6 @@ public class CategoryServiceImpl implements CategoryService {
     public Result<List<Category>> query(CategoryQueryDto categoryQueryDto) {
         int totalCount = categoryMapper.queryCount(categoryQueryDto);
         List<Category> categoryList = categoryMapper.query(categoryQueryDto);
-        return ApiResult.success(categoryList);
+        return ApiResult.success(categoryList,totalCount);
     }
 }

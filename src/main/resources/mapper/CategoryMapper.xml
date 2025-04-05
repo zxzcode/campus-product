@@ -12,7 +12,7 @@
                 name = #{name},
             </if>
             <if test="isUse != null">
-                isUse = #{isUse}
+                is_use = #{isUse},
             </if>
         </set>
         where id = #{id}
@@ -31,7 +31,7 @@
             <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')
             </if>
-            <if test="is_use != null">
+            <if test="isUse != null">
                 is_use=#{isUse}
             </if>
         </where>
@@ -42,13 +42,21 @@
         from category
         <where>
             <if test="name!= null and name != ''">
-               and name = #{name}
+               and name like concat('%',#{name},'%')
             </if>
             <if test="isUse != null">
                 and is_use = #{isUse}
             </if>
         </where>
-        Oreder by id DESC
-        LIMIT#{current},#{size}
+        Order by id DESC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
     </select>
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.kmbeast.pojo.entity.Category">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="is_use" property="isUse"/>
+    </resultMap>
 </mapper>

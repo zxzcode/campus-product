@@ -1,11 +1,11 @@
 package cn.kmbeast.controller;
 
+import cn.kmbeast.aop.Pager;
 import cn.kmbeast.aop.Protector;
 import cn.kmbeast.pojo.api.Result;
 import cn.kmbeast.pojo.dto.query.extend.CategoryQueryDto;
 import cn.kmbeast.pojo.entity.Category;
 import cn.kmbeast.service.CategoryService;
-import org.apache.ibatis.io.ResolverUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +33,8 @@ public class CategoryController {
     public Result<String> batchDelete(@RequestBody List<Integer> ids){
         return categoryService.batchDelete(ids);
     }
+    @Pager
+    @PostMapping("/query")
     public Result<List<Category>> query(@RequestBody CategoryQueryDto categoryQueryDto){
         return categoryService.query(categoryQueryDto);
     }

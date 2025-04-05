@@ -19,6 +19,8 @@ spring:
     password: 1111
 # 让 Mybatis 在 Mapper目录下找到 XML 映射文件
 mybatis:
+  configuration:
+    map-underscore-to-camel-case: true # 自动下划线转驼峰
   mapper-locations: classpath:mapper/*.xml
 
 
