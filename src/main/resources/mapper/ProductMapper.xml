@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kmbeast.mapper.ProductMapper">
+
+    <insert id="save">
+        insert into product (name,detail,cover_list,old_level,category_id,user_id,inventory,price,is_bargain,create_time)
+        values(#{name},#{detail},#{coverList},#{oldLevel},#{categoryId},#{userId},#{inventory},#{price},#{isBargain},#{createTime})
+    </insert>
+    <update id="update">
+        update product
+        <set>
+            <if test="name!=null and name != ''">
+                name=#{name}
+            </if>
+            <if test="detail!=null and detail !=''">
+                detail =#{detail}
+            </if>
+            <if test="coverList!=null ">
+                cover_list = #{coverList}
+            </if>
+            <if test="old_level !=null">
+                old_level=#{oldLevel}
+            </if>
+            <if test="categoryId != null">
+                category_id =#{categoryId}
+            </if>
+            <if test="userId != null">
+                user_id=#{userId}
+            </if>
+            <if test="inventory">
+                inventory =#{inventory}
+            </if>
+            <if test="price!=null">
+                price  = #{price}
+            </if>
+            <if test="isBargain!=null">
+                is_bargain=#{isBargain}
+            </if>
+            <if test="createTime!=null">
+                create_time =#{createTime}
+            </if>
+        </set>
+        where id =#{id}
+    </update>
+    <delete id="batchDelete" parameterType="list">
+        delete from product
+        where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            id
+        </foreach>
+    </delete>
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(*)
+        from product
+        <where>
+            <if test="id != null">
+                AND p.id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId!=null">
+                and  category_id = #{categoryId}
+            </if>
+            <if test="userId !=null">
+                and  user_id=#{userId}
+            </if>
+            <if test="isBargain!=null">
+                and is_bargain=#{isBargain}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and create_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="query" resultType="cn.kmbeast.pojo.vo.ProductVO">
+        select *,u.user_name,u.user_avatar,c.name as categoryName
+        from product p
+        left join user u on u.id = p.user_id
+        left join category  c on c.id = p.category_id
+        <where>
+            <if test="id != null">
+                AND p.id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and p.name like concat('%',#{name},'%')
+            </if>
+            <if test="categoryId!=null">
+               and  p.category_id = #{categoryId}
+            </if>
+            <if test="userId !=null">
+                and  p.user_id=#{userId}
+            </if>
+            <if test="isBargain!=null">
+                and p.is_bargain=#{isBargain}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and p.create_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+        order by p.id Desc
+        <if test="current!=null and size!=null">
+            Limit #{current},#{size}
+        </if>
+    </select>
+
+</mapper>
