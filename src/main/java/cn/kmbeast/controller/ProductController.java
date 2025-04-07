@@ -56,9 +56,9 @@ public class ProductController {
     public Result<List<ProductVO>> query(@RequestBody ProductQueryDto productQueryDto){
         return productService.query(productQueryDto);
     }
-    @PostMapping ("/polish")
+    @GetMapping ("/polish")
    
-    public SseEmitter polish(@RequestBody String detail){
+    public SseEmitter polish(@RequestParam("detail") String detail){
         return productService.polish(detail);
     }
 

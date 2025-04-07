@@ -17,8 +17,7 @@ import java.io.Writer;
  * 思路：用户登录成功后，会得到后端生成的 token，前端会将token存储于本地
  * 随后的接口请求，都会在协议头带上token
  * 所有请求执行之前，都会被该拦截器拦截：token校验通过则正常放行请求，否则直接返回
- *
- * @author 【B站：程序员晨星】
+
  */
 public class JwtInterceptor implements HandlerInterceptor {
 
@@ -40,7 +39,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         String requestURI = request.getRequestURI();
         // 登录及错误等请求不做拦截
-        if (requestURI.contains("/login") || requestURI.contains("/error") || requestURI.contains("/file") || requestURI.contains("/register")) {
+        if (requestURI.contains("/login") || requestURI.contains("/error") || requestURI.contains("/file") || requestURI.contains("/register")||requestURI.contains("/polish")) {
             return true;
         }
         String token = request.getHeader("token");

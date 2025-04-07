@@ -15,6 +15,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedHeaders("*")
                 .allowedMethods("*")
-                .maxAge(5000);
+                .allowedOrigins("http://localhost:21091")
+                .maxAge(5000)
+                .exposedHeaders("Content-Type")
+                .allowCredentials(true);;
     }
 }

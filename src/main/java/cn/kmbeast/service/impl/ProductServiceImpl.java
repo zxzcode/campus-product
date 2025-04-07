@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public SseEmitter polish(String detail) {
         logger.info("开始处理润色请求，内容长度: {}", detail != null ? detail.length() : 0);
-        // 设置更长的超时时间，避免长时间处理时连接断开
+        // 设置合理的超时时间，避免长时间处理时连接断开
         SseEmitter emitter = new SseEmitter(60000L);
 
         if (detail == null || detail.length() < 10) {
@@ -143,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
                             "❌ 虚构商品没有的特性\n" +
                             "❌ 使用夸张修辞如\"史上最低价\"\n" +
                             "❌ 出现联系方式或外链\n\n" +
-                            "下面是输入的用户的内容:" + detail)
+                            "下面是输入的用户的内容:" + detail+",直接返回优化后的内容，不要有'以下是优化后','优化完成'相关词语")
                     .incrementalOutput(true)
                     .build();
 
@@ -185,6 +185,7 @@ public class ProductServiceImpl implements ProductService {
                                     if (result != null && result.getOutput() != null) {
                                         String text = result.getOutput().getText();
                                         if (text != null && !text.isEmpty()) {
+                                            // 使用JSON格式发送数据，确保客户端能正确解析
                                             emitter.send(SseEmitter.event()
                                                     .data("{\"content\": \"" + text + "\"}"));
                                         }
