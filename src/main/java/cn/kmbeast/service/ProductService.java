@@ -19,4 +19,6 @@ public interface ProductService {
     Result<List<ProductVO>> query(ProductQueryDto productQueryDto);
 
     SseEmitter polish(String detail);
+
+    Result<List<ProductVO>> queryUser(ProductQueryDto productQueryDto);
 }

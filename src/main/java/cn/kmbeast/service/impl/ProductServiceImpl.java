@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -71,8 +72,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Result<List<ProductVO>> query(ProductQueryDto productQueryDto) {
         int totalCount = productMapper.queryCount(productQueryDto);
-        List<ProductVO> product = productMapper.query(productQueryDto);
-        return ApiResult.success();
+        List<ProductVO> productVOList = productMapper.query(productQueryDto);
+        return ApiResult.success(productVOList,totalCount);
     }
 
     @Override
@@ -257,6 +258,15 @@ public class ProductServiceImpl implements ProductService {
             }
             return emitter;
         }
+    }
+
+    @Override
+    public Result<List<ProductVO>> queryUser(ProductQueryDto productQueryDto) {
+        if(ObjectUtils.isEmpty(productQueryDto)){
+            return  ApiResult.error("1");
+        }
+        productMapper.queryUser(productQueryDto);
+        return null;
     }
 
 }

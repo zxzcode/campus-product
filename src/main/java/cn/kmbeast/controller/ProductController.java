@@ -2,6 +2,7 @@ package cn.kmbeast.controller;
 
 import cn.kmbeast.aop.Pager;
 import cn.kmbeast.aop.Protector;
+import cn.kmbeast.context.LocalThreadHolder;
 import cn.kmbeast.pojo.api.Result;
 import cn.kmbeast.pojo.dto.query.extend.CategoryQueryDto;
 import cn.kmbeast.pojo.dto.query.extend.ProductQueryDto;
@@ -57,9 +58,12 @@ public class ProductController {
         return productService.query(productQueryDto);
     }
     @GetMapping ("/polish")
-   
     public SseEmitter polish(@RequestParam("detail") String detail){
         return productService.polish(detail);
     }
-
+    @PostMapping("/queryUser")
+    public Result<List<ProductVO>> queryUser(@RequestBody ProductQueryDto productQueryDto){
+        productQueryDto.setUserId(LocalThreadHolder.getUserId());
+        return productService.query(productQueryDto);
+    }
 }

@@ -49,13 +49,10 @@
             id
         </foreach>
     </delete>
-    <select id="queryCount" resultType="java.lang.Integer">
+    <select id="queryCount"  resultType="int">
         select count(*)
         from product
         <where>
-            <if test="id != null">
-                AND p.id = #{id}
-            </if>
             <if test="name != null and name != ''">
                 and name like concat('%',#{name},'%')
             </if>
@@ -75,7 +72,7 @@
     </select>
 
     <select id="query" resultType="cn.kmbeast.pojo.vo.ProductVO">
-        select *,u.user_name,u.user_avatar,c.name as categoryName
+        select p.*,u.user_name ,u.user_avatar,c.name as categoryName
         from product p
         left join user u on u.id = p.user_id
         left join category  c on c.id = p.category_id
@@ -103,6 +100,12 @@
         <if test="current!=null and size!=null">
             Limit #{current},#{size}
         </if>
+    </select>
+    <select id="queryUser" resultType="cn.kmbeast.pojo.vo.ProductVO">
+        select *,u.user_name,u.user_avatar,c.name as categoryName
+        from product p
+        left join user u on p.user_id = u.id
+        left join category c on c.id = p.category_id
     </select>
 
 </mapper>

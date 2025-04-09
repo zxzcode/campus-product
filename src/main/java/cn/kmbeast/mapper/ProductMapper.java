@@ -18,4 +18,6 @@ public interface ProductMapper {
     int queryCount(ProductQueryDto productQueryDto);
 
     List<ProductVO> query(ProductQueryDto productQueryDto);
+
+    List<ProductVO> queryUser(ProductQueryDto productQueryDto);
 }
