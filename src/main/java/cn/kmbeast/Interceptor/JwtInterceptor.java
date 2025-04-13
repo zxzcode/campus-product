@@ -39,7 +39,13 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
         String requestURI = request.getRequestURI();
         // 登录及错误等请求不做拦截
-        if (requestURI.contains("/login") || requestURI.contains("/error") || requestURI.contains("/file") || requestURI.contains("/register")||requestURI.contains("/polish")) {
+        if (requestURI.contains("/login")
+                || requestURI.contains("/error")
+                || requestURI.contains("/file")
+                || requestURI.contains("/register")
+                || requestURI.contains("/polish")
+                || requestURI.contains("/query")
+        ) {
             return true;
         }
         String token = request.getHeader("token");

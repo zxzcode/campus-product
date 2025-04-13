@@ -4,9 +4,11 @@ import cn.kmbeast.pojo.dto.query.extend.EvaluationsQueryDto;
 import cn.kmbeast.pojo.entity.Evaluations;
 import cn.kmbeast.pojo.vo.CommentChildVO;
 import cn.kmbeast.pojo.vo.CommentParentVO;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+@Mapper
 
 /**
  * 评论持久化接口

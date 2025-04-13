@@ -40,7 +40,7 @@ public class Orders {
     /**
      * 交易状态
      */
-    private Boolean tradeStatus;
+    private Integer tradeStatus;
     /**
      * 交易时间
      */

@@ -2,10 +2,11 @@ package cn.kmbeast.mapper;
 
 import cn.kmbeast.pojo.dto.query.extend.UserQueryDto;
 import cn.kmbeast.pojo.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 /**
  * 用户持久化接口
  */
