@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.kmbeast.mapper.InteractionMapper">
+    <update id="likeProduct">
+        update interaction
+        set type = 3
+        where id = #{productId} and user_id = #{userId}
+    </update>
 
     <delete id="batchDelete">
         delete from interaction
@@ -34,8 +39,8 @@
             Limit #{current},#{size}
         </if>
     </select>
-    <select id="queryCount" parameterType="cn.kmbeast.pojo.dto.query.extend.InteractionQueryDto" resultType="java.lang.Integer">
-        select *
+    <select id="queryCount" parameterType="cn.kmbeast.pojo.dto.query.extend.InteractionQueryDto" resultType="int">
+        select count(*) as count
         from interaction
         <where>
             <if test="id!=null">

@@ -13,4 +13,6 @@ public interface InteractionService {
 
     Result<Boolean> saveOperation(Integer productId);
     Result<String> save(Interaction interaction);
+
+    Result<String> likeProduct(Integer productId);
 }

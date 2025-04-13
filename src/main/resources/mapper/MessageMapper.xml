@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kmbeast.mapper.MessageMapper">
+<!--    保存消息-->
+    <insert id="save">
+        insert into message (user_id,content,is_read,create_time)
+        values (#{userId},#{content},#{isRead},#{createTime})
+    </insert>
+<!--    已读消息-->
+    <update id="setRead">
+        update message
+        set is_read = 1
+        where user_id=#{userId}
+    </update>
+<!--    给他那句Id删除消息-->
+    <delete id="batchDelete">
+        delete from message
+        where id in
+        <foreach collection="ids" item="id" open="("  separator="," close=")">
+            id
+        </foreach>
+    </delete>
+<!--查询消息根据用户id-->
+    <select id="query" resultType="cn.kmbeast.pojo.vo.MessageVO">
+        select * from message
+        <where>
+            <if test="name != null and name != ''">
+                AND c.name LIKE concat('%',#{name},'%')
+            </if>
+            <if test="isUse != null">
+                AND c.is_use = #{isUse}
+            </if>
+        </where>
+        ORDER BY c.id DESC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+    <!--满足分页条件的数据总项-->
+    <select id="queryCount" resultType="integer">
+        SELECT COUNT(*)
+        FROM message c
+        <where>
+            <if test="name != null and name != ''">
+                AND c.name LIKE concat('%',#{name},'%')
+            </if>
+            <if test="isUse != null">
+                AND c.is_use = #{isUse}
+            </if>
+        </where>
+    </select>
+</mapper>

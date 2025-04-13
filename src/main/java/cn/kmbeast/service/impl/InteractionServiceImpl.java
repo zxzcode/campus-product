@@ -2,21 +2,37 @@ package cn.kmbeast.service.impl;
 
 import cn.kmbeast.context.LocalThreadHolder;
 import cn.kmbeast.mapper.InteractionMapper;
+import cn.kmbeast.mapper.ProductMapper;
+import cn.kmbeast.mapper.UserMapper;
 import cn.kmbeast.pojo.api.ApiResult;
 import cn.kmbeast.pojo.api.Result;
 import cn.kmbeast.pojo.dto.query.extend.InteractionQueryDto;
+import cn.kmbeast.pojo.dto.query.extend.ProductQueryDto;
 import cn.kmbeast.pojo.em.InteractionEnum;
 import cn.kmbeast.pojo.entity.Interaction;
+import cn.kmbeast.pojo.entity.Message;
+import cn.kmbeast.pojo.entity.User;
+import cn.kmbeast.pojo.vo.ProductVO;
 import cn.kmbeast.service.InteractionService;
+import cn.kmbeast.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.stream.Collectors;
-
+@Service
 public class InteractionServiceImpl implements InteractionService {
+    @Autowired
     private InteractionMapper interactionMapper;
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private UserMapper userMapper;
     @Override
     public Result<String> batchDelete(List<Integer> ids) {
         if(CollectionUtils.isEmpty(ids)){
@@ -32,8 +48,8 @@ public class InteractionServiceImpl implements InteractionService {
             return ApiResult.error("查询参数为空");
         }
         int totalCount = interactionMapper.queryCount(interactionQueryDto);
-        interactionMapper.query(interactionQueryDto);
-        return null;
+        List<Interaction> interactionList = interactionMapper.query(interactionQueryDto);
+        return ApiResult.success(interactionList,totalCount);
     }
 
     @Override
@@ -67,5 +83,44 @@ public class InteractionServiceImpl implements InteractionService {
         }
         interactionMapper.save(interaction);
         return ApiResult.success("保存成功");
+    }
+
+    @Override
+    public Result<String> likeProduct(Integer productId) {
+        if(ObjectUtils.isEmpty(productId)){
+            return ApiResult.error("未获取到商品ID");
+        }
+        //用户不能重复想要一个商品
+        InteractionQueryDto interactionQueryDto =  new InteractionQueryDto();
+        interactionQueryDto.setUserId(LocalThreadHolder.getUserId());
+        interactionQueryDto.setProductId(productId);
+        interactionQueryDto.setType(InteractionEnum.LOVE.getType());
+        int count = interactionMapper.queryCount(interactionQueryDto);
+        if(count != 0){
+            return ApiResult.error("您已经想要过该商品");
+        }
+        // 如果商品信息不存在，直接返回
+        ProductQueryDto productQueryDto = new ProductQueryDto();
+        productQueryDto.setId(productId);
+        List<ProductVO> product = productMapper.query(productQueryDto);
+        if(CollectionUtils.isEmpty(product)){
+            return ApiResult.error("商品信息不存在");
+        }
+        // 用户自己感兴趣自己的商品，明显不合理，所以如果商品是自己的商品，不做处理了
+        if(Objects.equals(product.get(0).getUserId(), LocalThreadHolder.getUserId())){
+            return ApiResult.error("不能自己想要自己的商品");
+        }
+        Integer publishUserId = product.get(0).getUserId() ;
+        Integer userId = LocalThreadHolder.getUserId();
+        User user = new User();
+        user.setId(userId);
+        User operator = userMapper.getByActive(user);
+        Message message = Message.builder()
+                .userId(publishUserId)
+                .content("用户【" + operator.getUserName() + "】对你的【" + product.get(0).getName() + "】感兴趣!")
+                .isRead(false)
+                .createTime(LocalDateTime.now())
+                .build();
+        return ApiResult.success("卖家已感受到你的热情，快下单吧!");
     }
 }
