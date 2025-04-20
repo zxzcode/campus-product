@@ -1,5 +1,6 @@
 package cn.kmbeast.service.impl;
 
+import cn.kmbeast.context.LocalThreadHolder;
 import cn.kmbeast.mapper.MessageMapper;
 import cn.kmbeast.pojo.api.ApiResult;
 import cn.kmbeast.pojo.api.Result;
@@ -53,5 +54,14 @@ public class MessageServiceImpl implements MessageService {
         }
         messageMapper.setRead(userId);
         return ApiResult.success("已读消息");
+    }
+
+    @Override
+    public Result<List<MessageVO>> queryUser() {
+        MessageQueryDto messageQueryDto = new MessageQueryDto();
+        messageQueryDto.setUserId(LocalThreadHolder.getUserId());
+        List<MessageVO> messageResultList = messageMapper.query(messageQueryDto);
+        return ApiResult.success(messageResultList);
+
     }
 }

@@ -1,6 +1,6 @@
 package cn.kmbeast.service.impl;
 
-import cn.kmbeast.mapper.OrderMapper;
+import cn.kmbeast.mapper.OrdersMapper;
 import cn.kmbeast.pojo.em.OrderStatus;
 import cn.kmbeast.pojo.entity.Orders;
 import cn.kmbeast.service.OrderCancelService;
@@ -11,19 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class OrderCancelServiceImpl implements OrderCancelService {
     @Autowired
-    private OrderMapper orderMapper;
+    private OrdersMapper ordersMapper;
 
     @Transactional
     public void cancelOrder(String orderId) {
         // 1. 查询订单状态
-        Orders order = (Orders) orderMapper.findById(orderId)
+        Orders order = (Orders) ordersMapper.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("订单不存在"));
 
         // 2. 只有未支付的订单才需要取消
-        if (order.getTradeStatus() == OrderStatus.UNPAID.getType()) {
+        if (order.getTradeStatus() == (OrderStatus.UNPAID.getType().equals(1)?false:true)) {
             // 3. 更新订单状态为已取消
-            order.setTradeStatus(OrderStatus.CANCELLED.getType());
-            orderMapper.save(order);
+            order.setTradeStatus(OrderStatus.UNPAID.getType().equals(1)?false:true);
+            ordersMapper.save(order);
 
             // 4. 执行补偿逻辑（如库存回滚等）
             compensateForCancellation(order);

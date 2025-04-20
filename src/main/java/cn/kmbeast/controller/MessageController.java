@@ -1,6 +1,7 @@
 package cn.kmbeast.controller;
 
 import cn.kmbeast.context.LocalThreadHolder;
+import cn.kmbeast.pojo.api.ApiResult;
 import cn.kmbeast.pojo.api.Result;
 import cn.kmbeast.pojo.dto.query.extend.MessageQueryDto;
 import cn.kmbeast.pojo.entity.Message;
@@ -25,7 +26,7 @@ public class MessageController {
         return messageService.query(messageQueryDto);
     }
 
-    @RequestMapping("/save")
+    @RequestMapping("/insert")
     public Result<String> save(Message message) {
         return messageService.save(message);
     }
@@ -41,5 +42,10 @@ public class MessageController {
     @ResponseBody
     public Result<String> setRead() {
         return messageService.setRead(LocalThreadHolder.getUserId());
+    }
+
+    @PostMapping("/queryUser")
+    public Result<List<MessageVO>> queryUser() {
+        return messageService.queryUser();
     }
 }

@@ -10,34 +10,34 @@
         update product
         <set>
             <if test="name!=null and name != ''">
-                name=#{name}
+                name=#{name},
             </if>
             <if test="detail!=null and detail !=''">
-                detail =#{detail}
+                detail =#{detail},
             </if>
             <if test="coverList!=null ">
-                cover_list = #{coverList}
+                cover_list = #{coverList},
             </if>
-            <if test="old_level !=null">
-                old_level=#{oldLevel}
+            <if test="oldLevel !=null">
+                old_level=#{oldLevel},
             </if>
             <if test="categoryId != null">
-                category_id =#{categoryId}
+                category_id =#{categoryId},
             </if>
             <if test="userId != null">
-                user_id=#{userId}
+                user_id=#{userId},
             </if>
-            <if test="inventory">
-                inventory =#{inventory}
+            <if test="inventory != null">
+                inventory =#{inventory},
             </if>
             <if test="price!=null">
-                price  = #{price}
+                price  = #{price},
             </if>
             <if test="isBargain!=null">
-                is_bargain=#{isBargain}
+                is_bargain=#{isBargain},
             </if>
             <if test="createTime!=null">
-                create_time =#{createTime}
+                create_time =#{createTime},
             </if>
         </set>
         where id =#{id}
@@ -46,7 +46,7 @@
         delete from product
         where id in
         <foreach collection="ids" item="id" open="(" separator="," close=")">
-            id
+            #{id}
         </foreach>
     </delete>
     <select id="queryCount"  resultType="int">
@@ -72,7 +72,10 @@
     </select>
 
     <select id="query" resultType="cn.kmbeast.pojo.vo.ProductVO">
-        select p.*,u.user_name ,u.user_avatar,c.name as categoryName
+        select p.*,u.user_name ,u.user_avatar,c.name as categoryName,
+        (SELECT COUNT(i1.id) FROM interaction i1 WHERE i1.product_id = p.id AND type = 3) AS like_number,
+        (SELECT COUNT(i2.id) FROM interaction i2 WHERE i2.product_id = p.id AND type = 1) AS save_number,
+        (SELECT COUNT(i3.id) FROM interaction i3 WHERE i3.product_id = p.id AND type = 2) AS view_number
         from product p
         left join user u on u.id = p.user_id
         left join category  c on c.id = p.category_id
@@ -106,6 +109,21 @@
         from product p
         left join user u on p.user_id = u.id
         left join category c on c.id = p.category_id
+    </select>
+    <select id="queryProductIds" resultType="java.lang.Integer">
+        SELECT p.id
+        FROM product p
+        WHERE p.user_id = #{userId}
+    </select>
+    <select id="queryProductList" resultType="cn.kmbeast.pojo.vo.ProductVO">
+        select p.*,u.user_name,u.user_avatar,c.name as categoryName
+        from product p
+        left join user u on p.user_id = u.id
+        left join category c on c.id = p.category_id
+        where p.id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
 </mapper>

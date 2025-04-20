@@ -4,6 +4,9 @@ import cn.kmbeast.pojo.entity.Product;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * 商品的出参VO类
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ProductVO extends Product {
@@ -19,4 +22,16 @@ public class ProductVO extends Product {
      * 商品类别名
      */
     private String categoryName;
+    /**
+     * 想要人数
+     */
+    private Integer likeNumber;
+    /**
+     * 收藏人数
+     */
+    private Integer saveNumber;
+    /**
+     * 浏览人数
+     */
+    private Integer viewNumber;
 }

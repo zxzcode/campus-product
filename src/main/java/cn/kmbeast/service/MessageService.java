@@ -15,4 +15,6 @@ public interface MessageService {
     Result<String> batchDelete(List<Integer> ids);
 
     Result<String> setRead(Integer userId);
+
+    Result<List<MessageVO>> queryUser();
 }

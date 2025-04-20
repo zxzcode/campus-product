@@ -8,4 +8,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MessageQueryDto extends QueryDto {
     private Integer userId;
+    /**
+     * 消息体
+     */
+    private String content;
 }

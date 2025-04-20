@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kmbeast.mapper.OrdersMapper">
+    <insert id="save">
+        insert into orders(code,detail,user_id,product_id,buy_price,trade_status,refund_status,refund_time,trade_time,is_refund_confirm,create_time)
+        values(#{code},#{detail},#{userId},#{productId},#{buyPrice},#{tradeStatus},#{refundStatus},#{refundTime},#{tradeTime},#{isRefundConfirm},#{createTime})
+    </insert>
+    <update id="update">
+        update orders
+        <set>
+            <if test="detail != null and detail != ''">
+                detail = #{detail},
+            </if>
+            <if test="buyPrice != null">
+                buy_price = #{buyPrice},
+            </if>
+            <if test="tradeStatus != null">
+                trade_status = #{tradeStatus},
+            </if>
+            <if test="tradeTime != null">
+                trade_time = #{tradeTime},
+            </if>
+            <if test="refundStatus != null">
+                refund_status = #{refundStatus},
+            </if>
+            <if test="refundTime != null">
+                refund_time = #{refundTime},
+            </if>
+            <if test="isRefundConfirm != null">
+                is_refund_confirm = #{isRefundConfirm},
+            </if>
+        </set>
+         where id = #{id}
+    </update>
+    <delete id="batchDelete">
+        delete from orders
+        where id in
+        <foreach collection="ids" item="id" open="("  separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findById">
+        select *
+        from orders
+        where id=#{id}
+    </select>
+    <select id="queryCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM orders o
+        <where>
+            <if test="code != null and code != ''">
+                AND o.code LIKE concat('%',#{code},'%')
+            </if>
+            <if test="detail != null and detail != ''">
+                AND o.detail LIKE concat('%',#{detail},'%')
+            </if>
+            <if test="userId != null">
+                AND o.user_id = #{userId}
+            </if>
+            <if test="productId != null">
+                AND o.product_id = #{productId}
+            </if>
+            <if test="tradeStatus != null">
+                AND o.trade_status = #{tradeStatus}
+            </if>
+            <if test="refundStatus != null">
+                AND o.refund_status = #{refundStatus}
+            </if>
+        </where>
+    </select>
+    <select id="query" resultType="cn.kmbeast.pojo.vo.OrdersVO">
+        SELECT o.*,
+        u.user_name,
+        u.user_avatar,
+        p.name AS product_title,
+        p.cover_list AS product_cover
+        FROM orders o
+        LEFT JOIN user u ON u.id = o.user_id
+        LEFT JOIN product p ON p.id = o.product_id
+        <where>
+            <if test="code != null and code != ''">
+                AND o.code LIKE concat('%',#{code},'%')
+            </if>
+            <if test="detail != null and detail != ''">
+                AND o.detail LIKE concat('%',#{detail},'%')
+            </if>
+            <if test="userId != null">
+                AND o.user_id = #{userId}
+            </if>
+            <if test="productId != null">
+                AND o.product_id = #{productId}
+            </if>
+            <if test="tradeStatus != null">
+                AND o.trade_status = #{tradeStatus}
+            </if>
+            <if test="refundStatus != null">
+                AND o.refund_status = #{refundStatus}
+            </if>
+            <if test="startTime != null and endTime != null">
+                AND o.create_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        ORDER BY o.id DESC
+        <if test="current != null and size != null">
+            LIMIT #{current},#{size}
+        </if>
+    </select>
+    <select id="queryByProductIds" resultType="cn.kmbeast.pojo.vo.OrdersVO">
+        SELECT o.*,
+        u.user_name,
+        u.user_avatar,
+        p.name AS product_title,
+        p.cover_list AS product_cover
+        FROM orders o
+        LEFT JOIN user u ON u.id = o.user_id
+        LEFT JOIN product p ON p.id = o.product_id
+        WHERE o.product_id IN
+        <foreach collection="productIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        <if test="tradeStatus != null">
+            AND o.trade_status = #{tradeStatus}
+        </if>
+        <if test="code != null and code != ''">
+            AND o.code LIKE concat('%',#{code},'%')
+        </if>
+        ORDER BY o.create_time DESC
+    </select>
+</mapper>

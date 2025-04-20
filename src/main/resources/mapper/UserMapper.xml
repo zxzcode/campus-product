@@ -10,6 +10,7 @@
                           user_role,
                           is_login,
                           is_word,
+                          last_login_time,
                           create_time)
         VALUES (#{userAccount},
                 #{userName},
@@ -19,6 +20,7 @@
                 #{userRole},
                 #{isLogin},
                 #{isWord},
+                #{lastLoginTime},
                 #{createTime})
     </insert>
     <update id="update" parameterType="cn.kmbeast.pojo.entity.User">
@@ -47,6 +49,9 @@
             </if>
             <if test="userRole != null">
                 user_role = #{userRole},
+            </if>
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
             </if>
         </set>
         WHERE id = #{id}
@@ -108,7 +113,7 @@
         </where>
         ORDER BY u.create_time DESC
         <if test="current != null and size != null">
-            Limit #{current},#{size}
+        LIMIT #{current},#{size}
         </if>
     </select>
 
@@ -154,6 +159,7 @@
         <result column="user_role" property="userRole"/>
         <result column="is_login" property="isLogin"/>
         <result column="is_word" property="isWord"/>
+        <result column="last_login_time" property="lastLoginTime"/>
         <result column="create_time" property="createTime"/>
     </resultMap>
 

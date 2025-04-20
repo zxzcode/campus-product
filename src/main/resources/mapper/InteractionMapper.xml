@@ -11,32 +11,37 @@
         delete from interaction
         where id in
         <foreach collection="ids" item="id" open="("  separator="," close=")">
-            id
+            #{id}
         </foreach>
     </delete>
-    <select id="query"  parameterType="cn.kmbeast.pojo.dto.query.extend.InteractionQueryDto" resultType="cn.kmbeast.pojo.entity.Interaction">
-        select *
-        from interaction
+    <select id="query"  parameterType="cn.kmbeast.pojo.dto.query.extend.InteractionQueryDto" resultType="cn.kmbeast.pojo.vo.InteractionVO">
+        SELECT i.*,
+        u.user_name,
+        u.user_account,
+        p.name AS product_title
+        FROM interaction i
+        LEFT JOIN user u ON u.id = i.user_id
+        LEFT JOIN product p ON p.id = i.product_id
         <where>
-            <if test="id!=null">
-                and id = #{id}
+            <if test="id != null">
+                AND i.id = #{id}
             </if>
             <if test="userId != null">
-                and  user_id = #{userId}
+                AND i.user_id = #{userId}
             </if>
-            <if test="productId!=null">
-                and product_id = #{productId}
+            <if test="productId != null">
+                AND i.product_id = #{productId}
             </if>
-            <if test="type !=null">
-                and type=#{type}
+            <if test="type != null">
+                AND i.type = #{type}
             </if>
-            <if test="startTime!=null and endTime!=null">
-                and createTime between #{startTime} and #{endTime}
+            <if test="startTime != null and endTime != null">
+                AND i.create_time BETWEEN #{startTime} AND #{endTime}
             </if>
         </where>
-        order  by id desc
+        ORDER BY i.id DESC
         <if test="current != null and size != null">
-            Limit #{current},#{size}
+            LIMIT #{current},#{size}
         </if>
     </select>
     <select id="queryCount" parameterType="cn.kmbeast.pojo.dto.query.extend.InteractionQueryDto" resultType="int">
@@ -59,6 +64,13 @@
                 and createTime between #{startTime} and #{endTime}
             </if>
         </where>
+    </select>
+    <select id="queryByProductIds" resultType="cn.kmbeast.pojo.entity.Interaction">
+        SELECT *
+        FROM interaction i WHERE i.product_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
     <insert id="save">
         insert into interaction(user_id,product_id,type,create_time)

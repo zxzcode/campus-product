@@ -42,6 +42,10 @@ public class Orders {
      */
     private BigDecimal buyPrice;
     /**
+     * 购买数量
+     */
+    private Integer buyNumber;
+    /**
      * 交易状态
      */
     private Boolean tradeStatus;

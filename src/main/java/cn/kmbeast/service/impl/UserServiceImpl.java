@@ -89,6 +89,11 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> map = new HashMap<>();
         map.put("token", token);
         map.put("role", user.getUserRole());
+        // 设置上一次登录时间
+        User userEntity = new User();
+        userEntity.setId(user.getId());
+        userEntity.setLastLoginTime(LocalDateTime.now());
+        userMapper.update(userEntity);
         return ApiResult.success("登录成功", map);
     }
 
